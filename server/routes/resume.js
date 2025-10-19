@@ -108,6 +108,7 @@ router.put('/:id', auth, async (req, res) => {
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
   try {
+    console.log(`DELETE /api/resume/${req.params.id} requested by userId=${req.userId}`);
     const resume = await Resume.findOneAndDelete({
       _id: req.params.id,
       userId: req.userId
@@ -162,6 +163,7 @@ router.post('/:id/duplicate', auth, async (req, res) => {
 // @access  Private
 router.get('/:id/pdf', auth, async (req, res) => {
   try {
+    console.log(`GET /api/resume/${req.params.id}/pdf requested by userId=${req.userId}`);
     const resume = await Resume.findOne({
       _id: req.params.id,
       userId: req.userId

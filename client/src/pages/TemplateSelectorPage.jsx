@@ -12,13 +12,15 @@ function TemplateSelectorPage() {
   const handleCreateResume = async () => {
     setIsCreating(true)
     try {
+      // Server requires firstName, lastName and a valid email on create (schema + request validation).
+      // Provide minimal placeholder values so the resume can be created and later edited by the user.
       const result = await createResume({
         title: 'New Resume',
         template: selectedTemplate,
         personalInfo: {
-          firstName: '',
-          lastName: '',
-          email: '',
+          firstName: 'First',
+          lastName: 'Last',
+          email: 'you@example.com',
           phone: '',
           address: {
             street: '',

@@ -2,24 +2,42 @@ const PdfPrinter = require('pdfmake');
 const fs = require('fs');
 const path = require('path');
 
-// Define fonts
-const fonts = {
-  Roboto: {
-    normal: path.join(__dirname, '../fonts/Roboto-Regular.ttf'),
-    bold: path.join(__dirname, '../fonts/Roboto-Medium.ttf'),
-    italics: path.join(__dirname, '../fonts/Roboto-Italic.ttf'),
-    bolditalics: path.join(__dirname, '../fonts/Roboto-MediumItalic.ttf')
-  }
+// Define expected font file paths (optional)
+const robotoPaths = {
+  normal: path.join(__dirname, '../fonts/Roboto-Regular.ttf'),
+  bold: path.join(__dirname, '../fonts/Roboto-Medium.ttf'),
+  italics: path.join(__dirname, '../fonts/Roboto-Italic.ttf'),
+  bolditalics: path.join(__dirname, '../fonts/Roboto-MediumItalic.ttf')
 };
 
-const printer = new PdfPrinter(fonts);
+// Check if all custom font files exist. If they do, register them with pdfmake.
+function getPrinterWithFonts() {
+  try {
+    const fontFiles = Object.values(robotoPaths);
+    const missing = fontFiles.filter(p => !fs.existsSync(p));
+    if (missing.length) {
+      console.warn('pdfGenerator: Warning - missing font files, falling back to pdfmake defaults. Missing:', missing);
+      // Return a PdfPrinter without custom fonts (pdfmake will use built-in fonts)
+      return new PdfPrinter();
+    }
+
+    const fonts = { Roboto: robotoPaths };
+    return new PdfPrinter(fonts);
+  } catch (err) {
+    console.warn('pdfGenerator: Error while checking fonts, falling back to defaults:', err);
+    return new PdfPrinter();
+  }
+}
+
+const printer = getPrinterWithFonts();
 
 // Template configurations
 const templates = {
   modern: {
-    primaryColor: '#2563eb',
-    secondaryColor: '#1e40af',
-    accentColor: '#3b82f6',
+    // Updated to green tones to match client theme
+    primaryColor: '#16a34a', // green-600
+    secondaryColor: '#15803d', // green-700
+    accentColor: '#34d399', // green-400
     headerFontSize: 24,
     sectionFontSize: 14,
     bodyFontSize: 10
@@ -51,19 +69,27 @@ const templates = {
 };
 
 async function generatePDF(resume) {
-  const template = templates[resume.template] || templates.modern;
-  const docDefinition = createDocumentDefinition(resume, template);
-  
-  return new Promise((resolve, reject) => {
-    const pdfDoc = printer.createPdfKitDocument(docDefinition);
-    const chunks = [];
-    
-    pdfDoc.on('data', chunk => chunks.push(chunk));
-    pdfDoc.on('end', () => resolve(Buffer.concat(chunks)));
-    pdfDoc.on('error', reject);
-    
-    pdfDoc.end();
-  });
+  try {
+    const template = templates[resume.template] || templates.modern;
+    const docDefinition = createDocumentDefinition(resume, template);
+
+    return await new Promise((resolve, reject) => {
+      const pdfDoc = printer.createPdfKitDocument(docDefinition);
+      const chunks = [];
+
+      pdfDoc.on('data', chunk => chunks.push(chunk));
+      pdfDoc.on('end', () => resolve(Buffer.concat(chunks)));
+      pdfDoc.on('error', err => {
+        console.error('pdfGenerator: pdfDoc error event:', err);
+        reject(err);
+      });
+
+      pdfDoc.end();
+    });
+  } catch (err) {
+    console.error('pdfGenerator: generatePDF error:', err);
+    throw err;
+  }
 }
 
 function createDocumentDefinition(resume, template) {

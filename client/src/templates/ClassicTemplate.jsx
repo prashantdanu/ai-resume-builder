@@ -1,9 +1,8 @@
-import ModernTemplate from './ModernTemplate'
+import Template1 from './Template1'
 
-// For now, use the same template as Modern
-// In a real implementation, this would have a different design
 function ClassicTemplate(props) {
-  return <ModernTemplate {...props} />
+  // Keep classic name but reuse Template1 layout imported from PDFs
+  return <Template1 {...props} />
 }
 
 export default ClassicTemplate

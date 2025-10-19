@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useResume } from '../contexts/ResumeContext'
 import { useAuth } from '../contexts/AuthContext'
@@ -23,6 +23,7 @@ import AchievementsForm from '../components/forms/AchievementsForm'
 import LanguagesForm from '../components/forms/LanguagesForm'
 import ATSScore from '../components/ATSScore'
 import ResumePreview from '../components/ResumePreview'
+import ResizablePreviewPane from '../components/ResizablePreviewPane'
 import toast from 'react-hot-toast'
 
 const defaultResumeData = {
@@ -79,6 +80,7 @@ function ResumeBuilderPage() {
   const [activeSection, setActiveSection] = useState('personal')
   const [isSaving, setIsSaving] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
+  const [showSections, setShowSections] = useState(true)
   const [atsScore, setAtsScore] = useState(null)
 
   const sections = [
@@ -145,6 +147,37 @@ function ResumeBuilderPage() {
       ...prev,
       [section]: data
     }))
+  }
+
+  const sectionIds = sections.map(s => s.id)
+
+  const validateSection = (sectionId) => {
+    // lightweight validation for moving forward
+    if (sectionId === 'personal') {
+      const p = resumeData.personalInfo || {}
+      if (!p.firstName || !p.lastName || !p.email) {
+        toast.error('Please fill first name, last name, and email before continuing')
+        return false
+      }
+    }
+    // other sections could add minimal checks in future
+    return true
+  }
+
+  const nextSection = () => {
+    const idx = sectionIds.indexOf(activeSection)
+    if (idx === -1) return
+    const next = sectionIds[idx + 1]
+    if (!next) return
+    if (!validateSection(activeSection)) return
+    setActiveSection(next)
+  }
+
+  const prevSection = () => {
+    const idx = sectionIds.indexOf(activeSection)
+    if (idx <= 0) return
+    const prev = sectionIds[idx - 1]
+    setActiveSection(prev)
   }
 
   const renderSection = () => {
@@ -257,6 +290,7 @@ function ResumeBuilderPage() {
               )}
               {isSaving ? 'Saving...' : 'Save'}
             </button>
+            {/* showSections toggle moved into the sidebar header */}
             <button
               onClick={handlePreview}
               className="btn btn-outline btn-md"
@@ -285,13 +319,23 @@ function ResumeBuilderPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="lg:flex lg:space-x-6">
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          {showSections && (
+            <div className="hidden lg:block lg:w-80">
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Resume Sections
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Resume Sections
+                </h3>
+                <button
+                  onClick={() => setShowSections(false)}
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                  title="Collapse sections"
+                >
+                  Collapse
+                </button>
+              </div>
               <nav className="space-y-2">
                 {sections.map((section) => {
                   const Icon = section.icon
@@ -323,25 +367,62 @@ function ResumeBuilderPage() {
               )}
             </div>
           </div>
+          )}
 
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            <div className="card p-6">
-              {renderSection()}
-            </div>
-          </div>
+          {/* Floating reopen button when sections are hidden */}
+          {!showSections && (
+            <button
+              onClick={() => setShowSections(true)}
+              className="hidden lg:flex items-center justify-center fixed left-2 top-1/3 w-10 h-28 bg-primary-600 text-white rounded-r-md shadow-lg z-50"
+              title="Open sections"
+            >
+              <span className="transform -rotate-90 text-sm">Sections</span>
+            </button>
+          )}
 
-          {/* Preview Panel */}
-          {showPreview && (
-            <div className="lg:col-span-1">
-              <div className="sticky top-8">
-                <ResumePreview 
-                  resumeData={resumeData}
-                  template={resumeData.template}
-                />
+          {/* Content + Preview split */}
+          <div className="flex-1 flex min-h-[400px] bg-transparent">
+            {/* Form area (left pane) */}
+            <div className="flex-1">
+              <div className="card p-6 h-full">
+                {renderSection()}
+                {/* Next / Previous navigation */}
+                <div className="mt-6 flex items-center justify-between">
+                  <div>
+                    <button
+                      type="button"
+                      onClick={prevSection}
+                      className={`btn btn-ghost mr-2 ${sectionIds.indexOf(activeSection) === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={sectionIds.indexOf(activeSection) === 0}
+                    >
+                      Previous
+                    </button>
+                    <button
+                      type="button"
+                      onClick={nextSection}
+                      className="btn btn-primary"
+                    >
+                      Next
+                    </button>
+                  </div>
+                  <div>
+                    {/* quick save button */}
+                    <button onClick={handleSave} className="btn btn-outline btn-sm">
+                      Save
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
+
+            {/* Preview splitter and pane (only when showPreview) */}
+            {showPreview && (
+              <ResizablePreviewPane
+                resumeData={resumeData}
+                template={resumeData.template}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

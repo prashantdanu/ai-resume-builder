@@ -21,7 +21,7 @@ import {
 import { format } from 'date-fns'
 
 function DashboardPage() {
-  const { user } = useAuth()
+  const { user, isAuthenticated } = useAuth()
   const { 
     resumes, 
     isLoading, 
@@ -36,8 +36,12 @@ function DashboardPage() {
   const [filterStatus, setFilterStatus] = useState('all')
 
   useEffect(() => {
-    loadResumes()
-  }, [])
+    if (isAuthenticated) {
+      loadResumes()
+    } else {
+      navigate('/login')
+    }
+  }, [isAuthenticated, navigate])
 
   const filteredResumes = resumes.filter(resume => {
     const matchesSearch = resume.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -80,7 +84,7 @@ function DashboardPage() {
       label: 'Total Resumes',
       value: resumes.length,
       icon: FileText,
-      color: 'text-blue-600',
+  color: 'text-primary-600',
       bgColor: 'bg-blue-100 dark:bg-blue-900/20'
     },
     {

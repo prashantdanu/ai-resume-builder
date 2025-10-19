@@ -1,12 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Download, Eye, Maximize2, Minimize2 } from 'lucide-react'
 import ModernTemplate from '../templates/ModernTemplate'
 import ClassicTemplate from '../templates/ClassicTemplate'
 import ElegantTemplate from '../templates/ElegantTemplate'
 import CreativeTemplate from '../templates/CreativeTemplate'
+import Template1 from '../templates/Template1'
+import Template2 from '../templates/Template2'
+import Template3 from '../templates/Template3'
+import Template4 from '../templates/Template4'
+import Template5 from '../templates/Template5'
 
 function ResumePreview({ resumeData, template = 'modern' }) {
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [lastUpdate, setLastUpdate] = useState(null)
 
   const renderTemplate = () => {
     const templateProps = {
@@ -23,6 +29,16 @@ function ResumePreview({ resumeData, template = 'modern' }) {
         return <ElegantTemplate {...templateProps} />
       case 'creative':
         return <CreativeTemplate {...templateProps} />
+      case 'template1':
+        return <Template1 {...templateProps} />
+      case 'template2':
+        return <Template2 {...templateProps} />
+      case 'template3':
+        return <Template3 {...templateProps} />
+      case 'template4':
+        return <Template4 {...templateProps} />
+      case 'template5':
+        return <Template5 {...templateProps} />
       default:
         return <ModernTemplate {...templateProps} />
     }
@@ -33,13 +49,27 @@ function ResumePreview({ resumeData, template = 'modern' }) {
     console.log('Download triggered')
   }
 
+  // Track resumeData changes to show live indicator
+  useEffect(() => {
+    setLastUpdate(new Date())
+  }, [resumeData])
+
   return (
     <div className={`resume-preview ${isFullscreen ? 'fixed inset-0 z-50 bg-white dark:bg-gray-900' : ''}`}>
-      {/* Preview Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Resume Preview
-        </h3>
+      {/* Preview Header (drag handle) */}
+  <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <div className="flex items-center space-x-3">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Resume Preview
+          </h3>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+            Live
+          </span>
+          {lastUpdate && (
+            <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">Updated {lastUpdate.toLocaleTimeString()}</span>
+          )}
+        </div>
+
         <div className="flex items-center space-x-2">
           <button
             onClick={handleDownload}
@@ -63,7 +93,7 @@ function ResumePreview({ resumeData, template = 'modern' }) {
       </div>
 
       {/* Preview Content */}
-      <div className={`overflow-auto ${isFullscreen ? 'h-full' : 'max-h-96'}`}>
+      <div className={`overflow-auto ${isFullscreen ? 'h-full' : ''} bg-gray-50 dark:bg-gray-800`}>
         <div className="p-4">
           {renderTemplate()}
         </div>

@@ -63,6 +63,76 @@ router.get('/', (req, res) => {
       ],
       colors: ['#f59e0b', '#d97706', '#b45309'],
       category: 'creative'
+    },
+    {
+      id: 'template1',
+      name: 'AutoCV',
+      description: 'Modern two-column layout with sidebar for contact info and skills',
+      preview: '/templates/template1-preview.png',
+      features: [
+        'Two-column layout',
+        'Sidebar design',
+        'Clean typography',
+        'Professional appearance'
+      ],
+      colors: ['#2563eb', '#1e40af', '#1e3a8a'],
+      category: 'professional'
+    },
+    {
+      id: 'template2',
+      name: 'Deedy Reversed',
+      description: 'Reversed layout with right sidebar and left content area',
+      preview: '/templates/template2-preview.png',
+      features: [
+        'Reversed layout',
+        'Right sidebar',
+        'Academic style',
+        'Clean design'
+      ],
+      colors: ['#374151', '#1f2937', '#111827'],
+      category: 'academic'
+    },
+    {
+      id: 'template3',
+      name: 'Engineering',
+      description: 'Condensed single-column layout perfect for technical resumes',
+      preview: '/templates/template3-preview.png',
+      features: [
+        'Single column',
+        'Condensed layout',
+        'Technical focus',
+        'ATS-friendly'
+      ],
+      colors: ['#059669', '#047857', '#065f46'],
+      category: 'technical'
+    },
+    {
+      id: 'template4',
+      name: 'RenderCV Classic',
+      description: 'Classic theme with side accent and bold project sections',
+      preview: '/templates/template4-preview.png',
+      features: [
+        'Classic theme',
+        'Side accent',
+        'Bold sections',
+        'Professional layout'
+      ],
+      colors: ['#7c3aed', '#6d28d9', '#5b21b6'],
+      category: 'traditional'
+    },
+    {
+      id: 'template5',
+      name: 'RenderCV Engineering',
+      description: 'Engineering-focused theme with centered header and clean sections',
+      preview: '/templates/template5-preview.png',
+      features: [
+        'Engineering focus',
+        'Centered header',
+        'Clean sections',
+        'Technical layout'
+      ],
+      colors: ['#dc2626', '#b91c1c', '#991b1b'],
+      category: 'engineering'
     }
   ];
 
@@ -231,6 +301,186 @@ router.get('/:id', (req, res) => {
         achievements: {
           name: 'Awards & Recognition',
           fields: ['title', 'description', 'date', 'category']
+        }
+      }
+    },
+    template1: {
+      id: 'template1',
+      name: 'AutoCV',
+      description: 'Modern two-column layout with sidebar for contact info and skills',
+      preview: '/templates/template1-preview.png',
+      features: [
+        'Two-column layout',
+        'Sidebar design',
+        'Clean typography',
+        'Professional appearance'
+      ],
+      colors: ['#2563eb', '#1e40af', '#1e3a8a'],
+      category: 'professional',
+      sections: {
+        header: {
+          name: 'Header',
+          fields: ['firstName', 'lastName', 'jobTitle', 'email', 'phone', 'location']
+        },
+        summary: {
+          name: 'Professional Summary',
+          fields: ['summary']
+        },
+        experience: {
+          name: 'Experience',
+          fields: ['company', 'position', 'location', 'startDate', 'endDate', 'description']
+        },
+        education: {
+          name: 'Education',
+          fields: ['institution', 'degree', 'field', 'location', 'startDate', 'endDate']
+        },
+        skills: {
+          name: 'Skills',
+          fields: ['category', 'skills']
+        },
+        projects: {
+          name: 'Projects',
+          fields: ['name', 'description', 'startDate', 'endDate']
+        }
+      }
+    },
+    template2: {
+      id: 'template2',
+      name: 'Deedy Reversed',
+      description: 'Reversed layout with right sidebar and left content area',
+      preview: '/templates/template2-preview.png',
+      features: [
+        'Reversed layout',
+        'Right sidebar',
+        'Academic style',
+        'Clean design'
+      ],
+      colors: ['#374151', '#1f2937', '#111827'],
+      category: 'academic',
+      sections: {
+        header: {
+          name: 'Header',
+          fields: ['firstName', 'lastName', 'email', 'phone', 'location']
+        },
+        summary: {
+          name: 'Summary',
+          fields: ['summary']
+        },
+        experience: {
+          name: 'Experience',
+          fields: ['company', 'position', 'location', 'startDate', 'endDate', 'description']
+        },
+        skills: {
+          name: 'Skills',
+          fields: ['category', 'skills']
+        }
+      }
+    },
+    template3: {
+      id: 'template3',
+      name: 'Engineering',
+      description: 'Condensed single-column layout perfect for technical resumes',
+      preview: '/templates/template3-preview.png',
+      features: [
+        'Single column',
+        'Condensed layout',
+        'Technical focus',
+        'ATS-friendly'
+      ],
+      colors: ['#059669', '#047857', '#065f46'],
+      category: 'technical',
+      sections: {
+        header: {
+          name: 'Header',
+          fields: ['firstName', 'lastName', 'email', 'phone', 'location']
+        },
+        summary: {
+          name: 'Summary',
+          fields: ['summary']
+        },
+        experience: {
+          name: 'Experience',
+          fields: ['company', 'position', 'startDate', 'endDate', 'description']
+        },
+        education: {
+          name: 'Education',
+          fields: ['institution', 'degree', 'startDate', 'endDate']
+        },
+        skills: {
+          name: 'Skills',
+          fields: ['category', 'skills']
+        }
+      }
+    },
+    template4: {
+      id: 'template4',
+      name: 'RenderCV Classic',
+      description: 'Classic theme with side accent and bold project sections',
+      preview: '/templates/template4-preview.png',
+      features: [
+        'Classic theme',
+        'Side accent',
+        'Bold sections',
+        'Professional layout'
+      ],
+      colors: ['#7c3aed', '#6d28d9', '#5b21b6'],
+      category: 'traditional',
+      sections: {
+        header: {
+          name: 'Header',
+          fields: ['firstName', 'lastName', 'email', 'phone', 'location']
+        },
+        summary: {
+          name: 'Summary',
+          fields: ['summary']
+        },
+        projects: {
+          name: 'Featured Projects',
+          fields: ['name', 'description', 'startDate', 'endDate']
+        },
+        experience: {
+          name: 'Experience',
+          fields: ['company', 'position', 'startDate', 'endDate', 'description']
+        },
+        skills: {
+          name: 'Skills',
+          fields: ['category', 'skills']
+        }
+      }
+    },
+    template5: {
+      id: 'template5',
+      name: 'RenderCV Engineering',
+      description: 'Engineering-focused theme with centered header and clean sections',
+      preview: '/templates/template5-preview.png',
+      features: [
+        'Engineering focus',
+        'Centered header',
+        'Clean sections',
+        'Technical layout'
+      ],
+      colors: ['#dc2626', '#b91c1c', '#991b1b'],
+      category: 'engineering',
+      sections: {
+        header: {
+          name: 'Header',
+          fields: ['firstName', 'lastName', 'email', 'phone', 'location']
+        },
+        summary: {
+          name: 'Summary',
+          fields: ['summary']
+        },
+        experience: {
+          name: 'Experience',
+          fields: ['company', 'position', 'startDate', 'endDate', 'description']
+        },
+        education: {
+          name: 'Education',
+          fields: ['institution', 'degree', 'startDate', 'endDate']
+        },
+        achievements: {
+          name: 'Achievements',
+          fields: ['title', 'description']
         }
       }
     }

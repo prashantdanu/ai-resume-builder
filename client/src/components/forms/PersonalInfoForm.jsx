@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { User, Mail, Phone, MapPin, Linkedin, Github, Globe } from 'lucide-react'
 import AIEnhancement from '../AIEnhancement'
@@ -11,12 +11,20 @@ function PersonalInfoForm({ data, onChange }) {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors }
   } = useForm({
     defaultValues: data
   })
 
   const watchedValues = watch()
+
+  // Keep form in sync if `data` prop changes (e.g., loading an existing resume)
+  useEffect(() => {
+    if (data) {
+      reset(data)
+    }
+  }, [data, reset])
 
   const onSubmit = (formData) => {
     onChange(formData)
@@ -28,6 +36,24 @@ function PersonalInfoForm({ data, onChange }) {
       summary: enhancedContent
     })
   }
+
+  // Debounced auto-change: call onChange when form values change so parent state updates
+  const debounceTimer = useRef(null)
+  useEffect(() => {
+    // don't call onChange on initial mount if data is empty
+    if (!watchedValues) return
+
+    // debounce to avoid excessive updates
+    if (debounceTimer.current) clearTimeout(debounceTimer.current)
+    debounceTimer.current = setTimeout(() => {
+      onChange(watchedValues)
+    }, 400)
+
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(watchedValues)])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
