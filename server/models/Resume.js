@@ -87,7 +87,7 @@ const resumeSchema = new mongoose.Schema({
   }],
   template: {
     type: String,
-    enum: ['modern', 'classic', 'elegant', 'creative'],
+    enum: ['modern', 'classic', 'elegant', 'creative', 'template1', 'template2', 'template3', 'template4', 'template5'],
     default: 'modern'
   },
   settings: {

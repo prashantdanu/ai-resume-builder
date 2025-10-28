@@ -20,27 +20,37 @@ function ResumePreview({ resumeData, template = 'modern' }) {
       isPreview: true
     }
 
-    switch (template) {
-      case 'modern':
-        return <ModernTemplate {...templateProps} />
-      case 'classic':
-        return <ClassicTemplate {...templateProps} />
-      case 'elegant':
-        return <ElegantTemplate {...templateProps} />
-      case 'creative':
-        return <CreativeTemplate {...templateProps} />
-      case 'template1':
-        return <Template1 {...templateProps} />
-      case 'template2':
-        return <Template2 {...templateProps} />
-      case 'template3':
-        return <Template3 {...templateProps} />
-      case 'template4':
-        return <Template4 {...templateProps} />
-      case 'template5':
-        return <Template5 {...templateProps} />
-      default:
-        return <ModernTemplate {...templateProps} />
+    try {
+      switch (template) {
+        case 'modern':
+          return <ModernTemplate {...templateProps} />
+        case 'classic':
+          return <ClassicTemplate {...templateProps} />
+        case 'elegant':
+          return <ElegantTemplate {...templateProps} />
+        case 'creative':
+          return <CreativeTemplate {...templateProps} />
+        case 'template1':
+          return <Template1 {...templateProps} />
+        case 'template2':
+          return <Template2 {...templateProps} />
+        case 'template3':
+          return <Template3 {...templateProps} />
+        case 'template4':
+          return <Template4 {...templateProps} />
+        case 'template5':
+          return <Template5 {...templateProps} />
+        default:
+          return <ModernTemplate {...templateProps} />
+      }
+    } catch (err) {
+      console.error('Error rendering template', template, err)
+      return (
+        <div className="p-6 bg-red-50 text-red-700 rounded">
+          <h3 className="font-semibold">Preview failed to render</h3>
+          <p className="text-sm">There was an error rendering the selected template ({template}). Check console for details.</p>
+        </div>
+      )
     }
   }
 

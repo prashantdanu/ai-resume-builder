@@ -16,16 +16,30 @@ function getPrinterWithFonts() {
     const fontFiles = Object.values(robotoPaths);
     const missing = fontFiles.filter(p => !fs.existsSync(p));
     if (missing.length) {
-      console.warn('pdfGenerator: Warning - missing font files, falling back to pdfmake defaults. Missing:', missing);
-      // Return a PdfPrinter without custom fonts (pdfmake will use built-in fonts)
-      return new PdfPrinter();
+      console.log('pdfGenerator: Using default fonts (Roboto fonts not found)');
+      // Return a PdfPrinter with default fonts configuration
+      return new PdfPrinter({
+        Roboto: {
+          normal: 'Helvetica',
+          bold: 'Helvetica-Bold',
+          italics: 'Helvetica-Oblique',
+          bolditalics: 'Helvetica-BoldOblique'
+        }
+      });
     }
 
     const fonts = { Roboto: robotoPaths };
     return new PdfPrinter(fonts);
   } catch (err) {
-    console.warn('pdfGenerator: Error while checking fonts, falling back to defaults:', err);
-    return new PdfPrinter();
+    console.log('pdfGenerator: Using default fonts due to error:', err.message);
+    return new PdfPrinter({
+      Roboto: {
+        normal: 'Helvetica',
+        bold: 'Helvetica-Bold',
+        italics: 'Helvetica-Oblique',
+        bolditalics: 'Helvetica-BoldOblique'
+      }
+    });
   }
 }
 
@@ -64,6 +78,46 @@ const templates = {
     accentColor: '#fbbf24',
     headerFontSize: 24,
     sectionFontSize: 14,
+    bodyFontSize: 10
+  },
+  template1: {
+    primaryColor: '#2563eb',
+    secondaryColor: '#1e40af',
+    accentColor: '#3b82f6',
+    headerFontSize: 24,
+    sectionFontSize: 14,
+    bodyFontSize: 10
+  },
+  template2: {
+    primaryColor: '#374151',
+    secondaryColor: '#1f2937',
+    accentColor: '#6b7280',
+    headerFontSize: 22,
+    sectionFontSize: 12,
+    bodyFontSize: 10
+  },
+  template3: {
+    primaryColor: '#059669',
+    secondaryColor: '#047857',
+    accentColor: '#10b981',
+    headerFontSize: 22,
+    sectionFontSize: 13,
+    bodyFontSize: 10
+  },
+  template4: {
+    primaryColor: '#7c3aed',
+    secondaryColor: '#6d28d9',
+    accentColor: '#8b5cf6',
+    headerFontSize: 24,
+    sectionFontSize: 14,
+    bodyFontSize: 10
+  },
+  template5: {
+    primaryColor: '#dc2626',
+    secondaryColor: '#b91c1c',
+    accentColor: '#ef4444',
+    headerFontSize: 22,
+    sectionFontSize: 13,
     bodyFontSize: 10
   }
 };
@@ -129,22 +183,24 @@ function createDocumentDefinition(resume, template) {
       ...(achievements && achievements.length > 0 ? [createAchievementsSection(achievements, template)] : [])
     ],
     styles: {
+      // Use neutral, print-friendly colors by default so PDF output
+      // matches the on-screen preview (which mainly uses grayscale).
       header: {
         fontSize: template.headerFontSize,
         bold: true,
-        color: template.primaryColor,
+        color: '#111827', // Tailwind gray-900
         margin: [0, 0, 0, 10]
       },
       sectionHeader: {
         fontSize: template.sectionFontSize,
         bold: true,
-        color: template.secondaryColor,
+        color: '#111827', // keep section headers dark/neutral
         margin: [0, 15, 0, 8]
       },
       subHeader: {
         fontSize: 12,
         bold: true,
-        color: template.accentColor,
+        color: '#374151', // Tailwind gray-700
         margin: [0, 5, 0, 3]
       },
       body: {
@@ -226,7 +282,7 @@ function createExperienceSection(experience, template) {
       {
         text: `${exp.company}${exp.location ? `, ${exp.location}` : ''}`,
         style: 'body',
-        color: template.accentColor,
+        color: '#374151',
         margin: [0, 0, 0, 3]
       }
     );
@@ -380,7 +436,7 @@ function createProjectsSection(projects, template) {
       projectsContent.push({
         text: `Technologies: ${project.technologies.join(', ')}`,
         style: 'body',
-        color: template.accentColor,
+        color: '#374151',
         margin: [0, 0, 0, 3]
       });
     }
@@ -389,7 +445,7 @@ function createProjectsSection(projects, template) {
       projectsContent.push({
         text: `URL: ${project.url}`,
         style: 'body',
-        color: template.primaryColor,
+        color: '#2563eb', // subtle link-like blue but still neutral in many templates
         margin: [0, 0, 0, 5]
       });
     }
@@ -431,7 +487,7 @@ function createCertificationsSection(certifications, template) {
       {
         text: cert.issuer,
         style: 'body',
-        color: template.accentColor,
+        color: '#374151',
         margin: [0, 0, 0, 5]
       }
     );

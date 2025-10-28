@@ -1,14 +1,13 @@
 import { format } from 'date-fns'
 
 function Template5({ data, isPreview = false }) {
-  const { personalInfo = {}, experience = [], education = [], skills = [], achievements = [] } = data || {}
+  const { personalInfo = {}, experience = [], education = [], skills = [], achievements = [], settings = {} } = data || {}
   const fmt = (d) => { if (!d) return ''; try { return format(new Date(d),'MMM yyyy') } catch { return d } }
 
-  // Elegant-style layout with centered header and separate sections
   return (
-    <div className={`${isPreview ? 'max-w-4xl mx-auto shadow-lg' : ''} bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-8`} style={{fontFamily: 'Arial, sans-serif'}}> 
-      <header className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{personalInfo.firstName} {personalInfo.lastName}</h1>
+    <div className={`${isPreview ? 'max-w-4xl mx-auto shadow-lg' : ''} bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-8`} style={{fontFamily: 'Georgia, serif'}}> 
+      <header className="text-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{personalInfo.firstName} {personalInfo.lastName}</h1>
         <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
           {personalInfo.email && <div>{personalInfo.email}</div>}
           {personalInfo.phone && <div>{personalInfo.phone}</div>}
@@ -20,7 +19,7 @@ function Template5({ data, isPreview = false }) {
       <main className="space-y-8">
         {experience && experience.length > 0 && (
           <section>
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide border-b border-gray-300 dark:border-gray-600 pb-1">Experience</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide pb-1" style={{borderBottom:'1px solid #e5e7eb'}}>Experience</h2>
             <div className="space-y-4">
               {experience.map((e,i) => (
                 <div key={i} className="mb-4">
@@ -29,7 +28,7 @@ function Template5({ data, isPreview = false }) {
                       <h3 className="font-semibold text-gray-900 dark:text-white">{e.position}</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">{e.company}</p>
                     </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{fmt(e.startDate)} - {e.current ? 'Present' : fmt(e.endDate)}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{fmt(e.startDate)} — {e.current ? 'Present' : fmt(e.endDate)}</span>
                   </div>
                   {e.description && <p className="text-sm text-gray-700 dark:text-gray-300 mt-2 leading-relaxed">{e.description}</p>}
                 </div>
@@ -40,7 +39,7 @@ function Template5({ data, isPreview = false }) {
 
         {education && education.length > 0 && (
           <section>
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide border-b border-gray-300 dark:border-gray-600 pb-1">Education</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide pb-1" style={{borderBottom:'1px solid #e5e7eb'}}>Education</h2>
             <div className="space-y-3">
               {education.map((ed,i) => (
                 <div key={i} className="mb-3">
@@ -49,7 +48,7 @@ function Template5({ data, isPreview = false }) {
                       <h3 className="font-semibold text-gray-900 dark:text-white">{ed.degree}</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">{ed.institution}</p>
                     </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{fmt(ed.startDate)} - {ed.current ? 'Present' : fmt(ed.endDate)}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{fmt(ed.startDate)} — {ed.current ? 'Present' : fmt(ed.endDate)}</span>
                   </div>
                 </div>
               ))}
@@ -59,7 +58,7 @@ function Template5({ data, isPreview = false }) {
 
         {achievements && achievements.length > 0 && (
           <section>
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide border-b border-gray-300 dark:border-gray-600 pb-1">Achievements</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wide pb-1" style={{borderBottom:'1px solid #e5e7eb'}}>Achievements</h2>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               {achievements.map((a,i) => (
                 <li key={i} className="flex items-start">

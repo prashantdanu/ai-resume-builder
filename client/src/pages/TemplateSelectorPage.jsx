@@ -1,13 +1,16 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useResume } from '../contexts/ResumeContext'
 import { Eye, Check, FileText, Download } from 'lucide-react'
+import ResumePreview from '../components/ResumePreview'
 
 function TemplateSelectorPage() {
   const navigate = useNavigate()
   const { templates, createResume } = useResume()
   const [selectedTemplate, setSelectedTemplate] = useState('modern')
   const [isCreating, setIsCreating] = useState(false)
+  const [previewTemplate, setPreviewTemplate] = useState(null)
+  const previewRef = useRef(null)
 
   const handleCreateResume = async () => {
     setIsCreating(true)
@@ -72,12 +75,27 @@ function TemplateSelectorPage() {
           {templates.map((template) => (
             <div
               key={template.id}
-              className={`template-card ${selectedTemplate === template.id ? 'selected' : ''}`}
-              onClick={() => setSelectedTemplate(template.id)}
+              className={`template-card cursor-pointer ${selectedTemplate === template.id ? 'selected' : ''}`}
+              onClick={() => {
+                // First click selects. If already selected, open preview (second click behavior).
+                if (selectedTemplate === template.id) {
+                  setPreviewTemplate(template.id)
+                  // scroll to preview section
+                  setTimeout(() => previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50)
+                } else {
+                  setSelectedTemplate(template.id)
+                  setPreviewTemplate(null)
+                }
+              }}
             >
               <div className="p-6">
                 <div className="aspect-[3/4] bg-white dark:bg-gray-800 rounded-lg shadow-md mb-4 flex items-center justify-center">
-                  <FileText className="w-16 h-16 text-gray-400" />
+                  {/* show thumbnail if available, else icon */}
+                  {template.preview ? (
+                    <img src={template.preview} alt={`${template.name} preview`} className="w-full h-full object-cover rounded-lg" />
+                  ) : (
+                    <FileText className="w-16 h-16 text-gray-400" />
+                  )}
                 </div>
                 
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -143,22 +161,31 @@ function TemplateSelectorPage() {
         </div>
 
         {/* Template Preview */}
-        <div className="mt-16">
+        <div className="mt-16" ref={previewRef}>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
             Template Preview
           </h2>
           <div className="max-w-4xl mx-auto">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-              <div className="aspect-[8.5/11] bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <FileText className="w-24 h-24 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Preview for {templates.find(t => t.id === selectedTemplate)?.name} template
-                  </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                    This would show a live preview of the selected template
-                  </p>
-                </div>
+              <div className="rounded-lg">
+                {/* If user opened preview (second click) show live ResumePreview for that template. Otherwise show a generic placeholder. */}
+                {previewTemplate ? (
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded">
+                    <ResumePreview resumeData={{ personalInfo: { firstName: 'First', lastName: 'Last', email: 'you@example.com', phone: '000-000-0000', location: 'City, Country', summary: 'Template preview sample.' } }} template={previewTemplate} />
+                  </div>
+                ) : (
+                  <div className="aspect-[8.5/11] bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center p-8">
+                    <div className="text-center">
+                      <FileText className="w-24 h-24 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-600 dark:text-gray-400">
+                        Preview for {templates.find(t => t.id === selectedTemplate)?.name} template
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                        Click the selected template card again to open a live preview here.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

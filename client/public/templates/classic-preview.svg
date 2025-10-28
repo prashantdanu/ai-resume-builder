@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
+  <rect width="100%" height="100%" fill="#fbfaf9"/>
+  <rect x="40" y="40" width="520" height="80" fill="#374151" rx="6"/>
+  <text x="60" y="90" font-family="Georgia, serif" font-size="28" fill="#ffffff">Classic Template</text>
+  <rect x="40" y="140" width="520" height="600" fill="#ffffff" stroke="#e5e7eb"/>
+  <text x="60" y="180" font-family="Georgia, serif" font-size="14" fill="#6b7280">Traditional, conservative layout</text>
+</svg>

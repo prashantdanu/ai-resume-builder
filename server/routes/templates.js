@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
       id: 'modern',
       name: 'Modern',
       description: 'Clean and contemporary design with bold typography',
-      preview: '/templates/modern-preview.png',
+  preview: '/templates/modern-preview.svg',
       features: [
         'Clean typography',
         'Color-coded sections',
@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
       id: 'classic',
       name: 'Classic',
       description: 'Traditional and timeless design for conservative industries',
-      preview: '/templates/classic-preview.png',
+  preview: '/templates/classic-preview.svg',
       features: [
         'Traditional layout',
         'Conservative styling',
@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
       id: 'elegant',
       name: 'Elegant',
       description: 'Sophisticated design with subtle styling and premium feel',
-      preview: '/templates/elegant-preview.png',
+  preview: '/templates/elegant-preview.svg',
       features: [
         'Sophisticated design',
         'Subtle accents',
@@ -54,7 +54,7 @@ router.get('/', (req, res) => {
       id: 'creative',
       name: 'Creative',
       description: 'Bold and innovative design for creative professionals',
-      preview: '/templates/creative-preview.png',
+  preview: '/templates/creative-preview.svg',
       features: [
         'Bold design elements',
         'Creative layout',
@@ -68,7 +68,7 @@ router.get('/', (req, res) => {
       id: 'template1',
       name: 'AutoCV',
       description: 'Modern two-column layout with sidebar for contact info and skills',
-      preview: '/templates/template1-preview.png',
+  preview: '/templates/template1-preview.svg',
       features: [
         'Two-column layout',
         'Sidebar design',
@@ -82,7 +82,7 @@ router.get('/', (req, res) => {
       id: 'template2',
       name: 'Deedy Reversed',
       description: 'Reversed layout with right sidebar and left content area',
-      preview: '/templates/template2-preview.png',
+  preview: '/templates/template2-preview.svg',
       features: [
         'Reversed layout',
         'Right sidebar',
@@ -96,7 +96,7 @@ router.get('/', (req, res) => {
       id: 'template3',
       name: 'Engineering',
       description: 'Condensed single-column layout perfect for technical resumes',
-      preview: '/templates/template3-preview.png',
+  preview: '/templates/template3-preview.svg',
       features: [
         'Single column',
         'Condensed layout',
@@ -110,7 +110,7 @@ router.get('/', (req, res) => {
       id: 'template4',
       name: 'RenderCV Classic',
       description: 'Classic theme with side accent and bold project sections',
-      preview: '/templates/template4-preview.png',
+  preview: '/templates/template4-preview.svg',
       features: [
         'Classic theme',
         'Side accent',
@@ -124,7 +124,7 @@ router.get('/', (req, res) => {
       id: 'template5',
       name: 'RenderCV Engineering',
       description: 'Engineering-focused theme with centered header and clean sections',
-      preview: '/templates/template5-preview.png',
+  preview: '/templates/template5-preview.svg',
       features: [
         'Engineering focus',
         'Centered header',
